@@ -1,3 +1,9 @@
+# A replication of IMAPC
+
+Dijkstra, N., Kok, P., & Fleming, S. M. (2022). Imagery adds stimulus-specific
+sensory evidence to perceptual detection. Journal of Vision, 22(2), 11.
+https://doi.org/10.1167/jov.22.2.11
+
 # jspsych-experiment-template
 
 This project was generated using `jspsych-experiment-template`. It leverages

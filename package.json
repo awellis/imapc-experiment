@@ -12,6 +12,7 @@
     "@jspsych/plugin-fullscreen": "^1.1.1",
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
     "@jspsych/plugin-preload": "^1.1.1",
+    "@kogpsy/jspsych-gabor-stimulus-plugin": "^0.9.4",
     "jspsych": "^7.3.0"
   },
   "devDependencies": {

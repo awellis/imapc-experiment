@@ -10,3 +10,4 @@ node_modules
 
 packaged
 .jspsych-builder
+*.code-workspace

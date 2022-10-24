@@ -1,14 +1,13 @@
 /**
- * @title Template Experiment
- * @description A template experiment to build upon.
+ * @title IMAPC
+ * @description A perceptual detection experiment
  * @version 1.0.0
  *
  * The following lines specify which media directories will be packaged and
  * preloaded by jsPsych. Modify them to arbitrary paths (or comma-separated
  * lists of paths) within the `media` directory, or just delete them.
- * @imageDir images
- * @audioDir audio
- * @videoDir video
+ *
+ * @assets media/audio
  */
 
 export function licenseNotice() {
@@ -29,6 +28,10 @@ import { initJsPsych } from 'jspsych';
 import FullscreenPlugin from '@jspsych/plugin-fullscreen';
 import HtmlKeyboardResponsePlugin from '@jspsych/plugin-html-keyboard-response';
 import PreloadPlugin from '@jspsych/plugin-preload';
+import { getPracticeTimeline } from './practice';
+import GaborStimulusPlugin from '@kogpsy/jspsych-gabor-stimulus-plugin';
+
+const NUMBER = 3;
 
 /**
  * This method will be executed by jsPsych Builder and is expected to run the
@@ -71,6 +74,55 @@ export async function run({ assetPaths, input = {}, environment }) {
     fullscreen_mode: true,
   });
 
+  const practiceTimeline = getPracticeTimeline();
+  timeline.push(practiceTimeline);
+
+  // Define configuration object
+  const config = {
+    stimulus: {
+      size: 200,
+      rotation: 45,
+    },
+    fixation_cross: {
+      size: 20,
+      weight: 4,
+      color: 'white',
+    },
+  };
+
+  const gaborTrial = {
+    type: GaborStimulusPlugin,
+    data: {
+      rotation: jsPsych.timelineVariable('rotation'),
+    },
+    config: () => {
+      const rotation = jsPsych.timelineVariable('rotation');
+
+      return {
+        stimulus: {
+          size: 200,
+          rotation: rotation,
+        },
+        fixation_cross: {
+          size: 20,
+          weight: 4,
+          color: 'white',
+        },
+      };
+    },
+    choices: ['f', 'j'],
+  };
+
+  // Push the plugin to the timeline
+  timeline.push({
+    timeline: [gaborTrial],
+    timeline_variables: [{ rotation: 45 }, { rotation: 105 }],
+    sample: {
+      type: 'fixed-repetitions',
+      size: NUMBER,
+    },
+  });
+
   // Run the experiment
   await jsPsych.run(timeline);
 
@@ -91,5 +143,6 @@ export async function run({ assetPaths, input = {}, environment }) {
   else {
     console.log('End of experiment. Results:');
     console.log(resultData);
+    resultData.localSave('csv', 'data.csv');
   }
 }
